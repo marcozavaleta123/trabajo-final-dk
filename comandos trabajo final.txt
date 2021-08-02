@@ -1,0 +1,88 @@
+gcloud config set compute/zone us-west1-a
+gcloud container clusters create trabajo-final
+kubectl config get-contexts
+kubectl config current-context
+kubectl config use-context gke_mitocode-318616_us-west1-a_trabajo-final
+
+*********ejercicio 1 ***************************************************************
+kubectl  create -f podT1.yaml
+kubectl  get  pod
+kubectl get pod application-pod-v1 -o json
+
+kubectl exec --stdin -ti application-pod-v1 -c mysql -- mysql -u root -ppassword
+kubectl logs -f application-pod-v1 application
+
+kubectl run -i --tty application --image=alpine -- sh
+kubectl attach application -c application -i -t
+apk --no-cache add curl
+
+curl --location --request POST 'http://10.0.2.6:8090/create?name=banana'
+curl --location --request POST 'http://10.0.2.6:8090/create?name=manzana'
+curl --location --request GET 'http://10.0.2.6:8090/list'
+
+
+*********ejercicio 2 ***************************************************************
+kubectl create namespace name1
+kubectl get namespaces
+kubectl config set-context $(kubectl config current-context) --namespace name1
+
+
+kubectl create -f custom-map-mysql.yaml
+kubectl create -f custom-map-app.yaml
+kubectl get configmap
+
+kubectl create -f rs-mysql.yml
+kubectl get rs
+
+kubectl create -f service-mysql.yaml
+kubectl describe service my-service-mysql
+kubectl get services
+
+kubectl create -f  rs-app.yaml
+kubectl get rs
+
+kubectl create -f  service-app.yml
+kubectl describe service my-service-app
+kubectl get services
+kubectl get pods
+
+kubectl run -i --tty test --image=alpine -- sh
+kubectl attach test -c test -i -t
+apk --no-cache add curl   
+
+curl --location --request GET 'http://my-service-app:8090/list'
+curl --location --request POST 'http://my-service-app:8090/create?name=banana'
+curl --location --request POST 'http://my-service-app:8090/create?name=manzana'
+curl --location --request POST 'http://my-service-app:8090/create?name=uva'
+curl --location --request POST 'http://my-service-app:8090/create?name=pera'
+
+
+
+*********ejercicio 3 ***************************************************************
+kubectl create namespace name2
+kubectl get namespaces
+kubectl config set-context $(kubectl config current-context) --namespace name2
+
+kubectl create -f secret-mysql.yaml
+kubectl create -f secret-app.yaml
+kubectl get secret
+
+kubectl create -f service-headless-mysql.yaml
+kubectl get service
+
+kubectl create -f stateful-mysql.yaml
+kubectl get StatefulSet
+kubectl get pod
+
+kubectl create -f deploy-app.yaml
+kubectl get deployment
+kubectl get rs
+kubectl get pod
+
+kubectl create -f service-app.yaml
+kubectl get service
+
+GET : http://34.82.194.11:8090/list
+POST: http://34.82.194.11:8090/create?name=banana
+
+

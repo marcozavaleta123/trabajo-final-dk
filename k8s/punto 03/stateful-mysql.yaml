@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: state-mysql
+spec:
+  selector:
+    matchLabels:
+      app: app-mysql
+  serviceName: "service-mysql"
+  replicas: 1
+  template:
+    metadata: 
+      labels:
+        app: app-mysql
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mysql
+        image: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+           secretKeyRef:
+            name: my-secret-mysql
+            key: MYSQL_ROOT_PASSWORD
+        - name: MYSQL_DATABASE
+          valueFrom:
+           secretKeyRef:
+            name: my-secret-mysql
+            key: MYSQL_DATABASE
+        ports:
+        - containerPort: 3306
+          name: tcp

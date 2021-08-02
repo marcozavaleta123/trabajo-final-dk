@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: application-pod-v1
+spec:
+  containers:
+  - image: mysql
+    name: mysql
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: password
+    - name: MYSQL_DATABASE
+      value: database
+    ports:
+    - containerPort: 3306
+      protocol: TCP
+  - image: marcozavaletab/application:v1
+    name: application
+    env:
+    - name: DATABASE_PORT
+      value: "3306"
+    - name: DATABASE_NAME
+      value: database
+    ports:
+    - containerPort: 8080
+      protocol: TCP
+  
+

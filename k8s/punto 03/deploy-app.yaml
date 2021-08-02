@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-app-v1
+spec:
+  replicas: 4
+  # control de estrategia para el rollout
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      name: java
+      labels:
+        app: app
+    spec:
+      containers:
+      - image: marcozavaletab/application:v1
+        name: main
+        env:
+        - name: DATABASE_HOST
+          valueFrom:
+           secretKeyRef:
+            name: my-secret-app
+            key: DATABASE_HOST
+        - name: DATABASE_PORT
+          valueFrom:
+           secretKeyRef:
+            name: my-secret-app
+            key: DATABASE_PORT
+        - name: DATABASE_NAME
+          valueFrom:
+           secretKeyRef:
+            name: my-secret-app
+            key: DATABASE_NAME
